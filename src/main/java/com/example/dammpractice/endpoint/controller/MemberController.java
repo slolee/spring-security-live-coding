@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.example.dammpractice.endpoint.model.CertificateRequest;
 import com.example.dammpractice.endpoint.model.MemberResponse;
 import com.example.dammpractice.endpoint.model.RegisterRequest;
 import com.example.dammpractice.service.MemberService;
@@ -37,6 +38,11 @@ public class MemberController {
 		return ResponseEntity.ok(memberService.retrieveMemberBy(id));
 	}
 
+	@PostMapping("/api/certificate")
+	public ResponseEntity<MemberResponse> certificate(@RequestBody CertificateRequest req) {
+		return ResponseEntity.ok(memberService.certificate(req));
+	}
+
 	// Login
 	// JWT -> 누가 인증한 건지 -> SecurityContext
 	// ThreadLocal -> 해당 스레드에서 모두 접근할 수 있는 변수
@@ -47,6 +53,10 @@ public class MemberController {
 		return ResponseEntity.ok(memberService.retrieveMemberBy(memberId));
 	}
 
+	/**
+	 *  결국 목적 : 권한(Role) 이 변경되고 AccessToken 을 새롭게 만들어줘야한다.
+	 *   -> 권한정보가 변경된고 토큰 재발행 API 호출, 로그인 API ...
+	 */
 	@PreAuthorize("hasAuthority('CERTIFICATED')")
 	@GetMapping("/api/post")
 	public ResponseEntity<String> post() {

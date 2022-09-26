@@ -37,4 +37,7 @@ public class Member {
 		this.role = role;
 	}
 
+	public void certificate() {
+		this.role = MemberRole.CERTIFICATED;
+	}
 }

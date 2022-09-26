@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.dammpractice.domain.Member;
 import com.example.dammpractice.domain.MemberRole;
+import com.example.dammpractice.endpoint.model.CertificateRequest;
 import com.example.dammpractice.endpoint.model.MemberResponse;
 import com.example.dammpractice.endpoint.model.RegisterRequest;
 import com.example.dammpractice.repository.MemberRepository;
@@ -49,6 +50,16 @@ public class MemberService {
 		return memberRepository.findMemberByEmail(email)
 			.filter(member -> passwordEncoder.matches(password, member.getPassword()))
 			.orElseThrow(() -> new RuntimeException("Validate X!"));
+	}
+
+	public MemberResponse certificate(CertificateRequest req) {
+		return memberRepository.findById(req.getMemberId())
+			.map(member -> {
+				member.certificate();
+				return memberRepository.save(member);
+			})
+			.map(MemberResponse::of)
+			.orElseThrow(() -> new RuntimeException("Not Found Member!"));
 	}
 
 }
