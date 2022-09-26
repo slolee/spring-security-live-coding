@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,6 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import com.example.dammpractice.security.handler.CustomAccessDeniedHandler;
 import com.example.dammpractice.security.handler.CustomAuthenticationEntryPoint;
 import com.example.dammpractice.security.jwt.JwtAuthenticationFilter;
 import com.example.dammpractice.security.jwt.JwtAuthenticationProvider;
@@ -27,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -35,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final LoginAuthenticationProvider loginAuthenticationProvider;
 	private final JwtAuthenticationProvider jwtAuthenticationProvider;
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+	private final CustomAccessDeniedHandler accessDeniedHandler;
 
 	@Bean
 	public AuthenticationManager authenticationManager() throws Exception {
@@ -75,6 +79,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+			.and()
+			.exceptionHandling()
+			.accessDeniedHandler(accessDeniedHandler)
 
 			.and()
 			.addFilterBefore(loginFiler(), UsernamePasswordAuthenticationFilter.class)

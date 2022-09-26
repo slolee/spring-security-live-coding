@@ -3,6 +3,7 @@ package com.example.dammpractice.endpoint.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +45,12 @@ public class MemberController {
 	public ResponseEntity<MemberResponse> retrieveMe() {
 		Long memberId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return ResponseEntity.ok(memberService.retrieveMemberBy(memberId));
+	}
+
+	@PreAuthorize("hasAuthority('CERTIFICATED')")
+	@GetMapping("/api/post")
+	public ResponseEntity<String> post() {
+		return ResponseEntity.ok("게시글 작성 완료!");
 	}
 
 	@PostMapping("/register")
