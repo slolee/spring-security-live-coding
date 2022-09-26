@@ -60,9 +60,4 @@ public class LoginAuthenticationFilter extends AbstractAuthenticationProcessingF
 		res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 	}
 
-	@Override
-	protected void unsuccessfulAuthentication(HttpServletRequest req, HttpServletResponse res, AuthenticationException failed) throws IOException, ServletException {
-		// Login 에 실패했다면 뭘할건지?
-	}
-
 }

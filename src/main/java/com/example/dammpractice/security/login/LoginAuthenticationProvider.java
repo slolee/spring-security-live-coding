@@ -44,6 +44,13 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 			// 인증 실패에 대한 로직
 			throw new CustomAuthenticationException("사용자 인증에 실패했습니다.", e);
 		}
+
+		/**
+		 *  status : 401, 500,,, Http Status
+		 *  timestamp : 언제 에러발생했는지
+		 *  error_code : 어떤 에러인지
+		 *  error_message : 어떤 에러인지 설명..
+		 */
 	}
 
 	@Override

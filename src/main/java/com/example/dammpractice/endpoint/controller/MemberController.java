@@ -42,8 +42,8 @@ public class MemberController {
 	// Tomcat -> Request per Thread
 	@GetMapping("/api/me")
 	public ResponseEntity<MemberResponse> retrieveMe() {
-		Long id = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return ResponseEntity.ok(memberService.retrieveMemberBy(id));
+		Long memberId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return ResponseEntity.ok(memberService.retrieveMemberBy(memberId));
 	}
 
 	@PostMapping("/register")
