@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.dammpractice.domain.Member;
 import com.example.dammpractice.domain.MemberRole;
+import com.example.dammpractice.domain.MemberType;
 import com.example.dammpractice.endpoint.model.CertificateRequest;
 import com.example.dammpractice.endpoint.model.MemberResponse;
 import com.example.dammpractice.endpoint.model.RegisterRequest;
@@ -23,12 +24,13 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
 
-	public MemberResponse register(RegisterRequest req) {
+	public MemberResponse register(RegisterRequest req, MemberType type) {
 		Member newMember = Member.builder()
 			.email(req.getEmail())
 			.password(passwordEncoder.encode(req.getPassword()))
 			.nickname(req.getNickname())
 			.role(MemberRole.UN_CERTIFICATED)
+			.type(type)
 			.build();
 		return MemberResponse.of(memberRepository.save(newMember));
 	}
@@ -41,6 +43,12 @@ public class MemberService {
 
 	public MemberResponse retrieveMemberBy(Long id) {
 		return memberRepository.findById(id)
+			.map(MemberResponse::of)
+			.orElseThrow(() -> new RuntimeException("Not Found Member!"));
+	}
+
+	public MemberResponse retrieveMemberByEmail(String email) {
+		return memberRepository.findMemberByEmail(email)
 			.map(MemberResponse::of)
 			.orElseThrow(() -> new RuntimeException("Not Found Member!"));
 	}
@@ -62,4 +70,7 @@ public class MemberService {
 			.orElseThrow(() -> new RuntimeException("Not Found Member!"));
 	}
 
+	public boolean existsByEmail(String email) {
+		return memberRepository.existsByEmail(email);
+	}
 }

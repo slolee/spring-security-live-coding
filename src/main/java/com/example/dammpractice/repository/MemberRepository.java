@@ -11,5 +11,6 @@ import com.example.dammpractice.domain.Member;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	Optional<Member> findMemberByEmail(String email);
+	boolean existsByEmail(String email);
 
 }

@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.AuthenticationEntryPointF
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.example.dammpractice.security.handler.CustomAccessDeniedHandler;
 import com.example.dammpractice.security.handler.CustomAuthenticationEntryPoint;
@@ -24,6 +23,8 @@ import com.example.dammpractice.security.jwt.JwtAuthenticationFilter;
 import com.example.dammpractice.security.jwt.JwtAuthenticationProvider;
 import com.example.dammpractice.security.login.LoginAuthenticationFilter;
 import com.example.dammpractice.security.login.LoginAuthenticationProvider;
+import com.example.dammpractice.security.oauth.CustomOauth2UserService;
+import com.example.dammpractice.security.oauth.OAuth2SuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final JwtAuthenticationProvider jwtAuthenticationProvider;
 	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 	private final CustomAccessDeniedHandler accessDeniedHandler;
+	private final CustomOauth2UserService oauth2UserService;
+	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
 	@Bean
 	public AuthenticationManager authenticationManager() throws Exception {
@@ -86,7 +89,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.and()
 			.addFilterBefore(loginFiler(), UsernamePasswordAuthenticationFilter.class)
-			.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+
+			.oauth2Login()
+			.redirectionEndpoint().baseUri("/oauth2/login/callback/*")
+			.and().userInfoEndpoint().userService(oauth2UserService)
+			.and().successHandler(oAuth2SuccessHandler);
 	}
 
 }

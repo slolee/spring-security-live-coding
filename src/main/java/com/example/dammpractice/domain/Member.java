@@ -9,9 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,12 +31,16 @@ public class Member {
 	@Enumerated(EnumType.STRING)
 	private MemberRole role;
 
+	@Enumerated(EnumType.STRING)
+	private MemberType type;
+
 	@Builder
-	public Member(String email, String password, String nickname, MemberRole role) {
+	public Member(String email, String password, String nickname, MemberRole role, MemberType type) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
 		this.role = role;
+		this.type = type;
 	}
 
 	public void certificate() {

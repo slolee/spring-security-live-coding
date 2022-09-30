@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.example.dammpractice.domain.MemberType;
 import com.example.dammpractice.endpoint.model.CertificateRequest;
 import com.example.dammpractice.endpoint.model.MemberResponse;
 import com.example.dammpractice.endpoint.model.RegisterRequest;
@@ -65,7 +66,7 @@ public class MemberController {
 
 	@PostMapping("/register")
 	public ResponseEntity<MemberResponse> register(@RequestBody RegisterRequest req) {
-		return ResponseEntity.ok(memberService.register(req));
+		return ResponseEntity.ok(memberService.register(req, MemberType.GENERAL));
 	}
 
 }

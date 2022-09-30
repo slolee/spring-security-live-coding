@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -16,3 +15,25 @@ spring:
   redis:
     port: 6379
     host: localhost
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ce26c7aa756fd0e1827f2657579d7646
+            redirect-uri: http://localhost:3000/oauth2/login/callback/kakao
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - account_email
+            client-name: Kakao
+        provider:
+          kakao:
+            authorization_uri: https://kauth.kakao.com/oauth/authorize
+            token_uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user_name_attribute: id
+
+
